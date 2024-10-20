@@ -1,0 +1,77 @@
+.App {
+    text-align: center;
+  }
+  
+  .navbar { 
+    background-color: #333;
+    padding: 5rem;  /* 상단 네비바 높이 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar-title {
+    color: white;
+    font-size: 1.5rem;
+  }
+  
+  .navbar-menu {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-menu li {
+    margin: 0 1rem;
+  }
+  
+  .navbar-menu li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .auth-button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  .menu-button {  
+    /* 피트 이벤트 알림 마이페이지 속성  */
+    position: relative; /* relative로 설정하여 ::after 위치 조정 가능 */
+    background-color: #333; 
+    color: white; /* 글자 색상 */
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem; /* 버튼 내부 여백 */
+    transition: background-color 0.3s; /* 부드러운 색상 전환 */
+  }
+  
+  .menu-button:hover {
+    background-color: #444; /* 마우스 오버 시 배경색 변경 (선택 사항) */
+  }
+  
+  .menu-button::after {
+    position: absolute; 
+    content: ""; 
+    display: block; 
+    border-bottom: 3px solid white; /* 밑줄 색상 */
+    transition: width 250ms ease-out; 
+    left: 0; 
+    right: auto;  
+    width: 100%; /* 초기 너비 설정 */
+    opacity: 0; /* 초기 상태에서 숨김 */
+  }
+  
+  .menu-button:hover::after {
+    opacity: 1; /* 마우스 오버 시 보이기 */
+  }
+  

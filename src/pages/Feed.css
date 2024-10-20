@@ -1,0 +1,15 @@
+.feed {
+    padding: 1rem;
+  }
+  
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 4개씩 확인가능 */
+    gap: 0.3rem;
+    padding: 12px;
+  }
+  
+  .photo-placeholder {
+    background-color: #e0e0e0;
+    height: 200px;
+  }
