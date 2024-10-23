@@ -29,8 +29,15 @@ userSchema.pre('save', async function (next) {
 });
 
 // 비밀번호가 일치하는지 확인하는 메서드
-userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+userSchema.methods.comparePassword = async function(enteredPassword) {
+	return await bcrypt.compare(enteredPassword, this.password);
+};
+
+userSchema.methods.generateToken = async function() {
+	const token = jwt.sign(this._id.toHexString(), "secretToken");
+	this.token = token;
+	await this.save();
+	return this;
 };
 
 // User 모델을 export

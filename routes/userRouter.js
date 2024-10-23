@@ -1,28 +1,20 @@
-import express from 'express';
-import { Login, Signup } from '../controllers/userController.js';
-import jwt from 'jsonwebtoken';
+import express from "express";
+import { authware } from "../middleware/auth.js"; // 미들웨어로 사용하는 auth import
+import { signup, login, auth, logout } from "../controllers/userController.js";  // 컨트롤러에서 authUser 가져오기
 
-const userRouter = express.Router();
+const router = express.Router();
 
-// userRouter.post('/signup', Signup);
-// 회원가입 라우터 예시
-userRouter.post('/signup', async (req, res) => {
-    try {
-        // 사용자 생성 과정
-        const user = new User(req.body);
-        await user.save();
+// 회원가입
+router.post("/signup", signup);
 
-        // JWT 토큰 생성
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+// 로그인
+router.post("/login", login);
 
-        res.status(201).json({ token });
-    } catch (err) {
-        console.error(err);  // 에러 로그 출력
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-userRouter.post('/login', Login);
+// 인증 경로 (auth 미들웨어 사용 후, authUser 컨트롤러로 처리)
+router.get("/auth", authware, auth);  // 미들웨어 auth를 먼저 적용하고, 인증된 유저 정보를 반환
 
-// app.use('/user', userRouter); // 사용자 관련 API 라우터를 '/user' 경로에 매핑
+// 로그아웃 (auth 미들웨어 사용)
+router.get("/logout", authware, logout);  // 로그아웃은 인증된 사용자만 가능하므로 auth 미들웨어 사용
 
-export default userRouter;
+export default router;
+
