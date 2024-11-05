@@ -1,0 +1,91 @@
+.post-detail {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  
+  .post-detail-image {
+    max-width: 900px;
+    margin-right: 20px;
+    border-radius: 8px;
+  }
+  
+  .post-detail-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 600px;
+  }
+  
+  .post-detail-info p {
+    margin: 10px 0;
+  }
+  
+  .post-author, .post-date, .post-content {
+    font-size: 16px;
+  }
+  
+  .post-author {
+    font-weight: bold;
+  }
+  
+  .post-date {
+    color: #888;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  
+  .post-content {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .like-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .like-icon {
+    width: 38px;
+    height: 43px;
+  }
+  
+  .comments-section {
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .comment-list {
+    margin-bottom: 10px;
+  }
+  
+  .comment {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .comment-form {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+  }
+  
+  .comment-form input {
+    flex: 1;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .comment-form button {
+    padding: 8px 12px;
+    cursor: pointer;
+  }

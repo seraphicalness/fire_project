@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css'; // 스타일 필요 시 사용
 
-const Header = () => {
+const Header = ({ isLoggedIn, handleLogout }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,8 +16,19 @@ const Header = () => {
           <li><button className="menu-button" onClick={() => navigate('/mypage')}>마이페이지</button></li>
         </ul>
         <div className="auth-buttons">
-          <button className="auth-button" onClick={() => navigate('/login')}>로그인</button>
-          <button className="auth-button" onClick={() => navigate('/signup')}>회원가입</button>
+          {/* 로그인 상태에 따라 로그인/로그아웃 버튼을 표시 */}
+          {isLoggedIn ? (
+            <>
+              <button className="auth-button" onClick={handleLogout}>로그아웃</button>
+            </>
+          ) : (
+            <>
+              <button className="auth-button" onClick={() => navigate('/login')}>로그인</button>
+              <button className="auth-button" onClick={() => navigate('/signup')}>회원가입</button>
+            </>
+          )}
+          {/* <button className="auth-button" onClick={() => navigate('/login')}>로그인</button> */}
+          {/* <button className="auth-button" onClick={() => navigate('/signup')}>회원가입</button> */}
         </div>
       </nav>
     </header>
