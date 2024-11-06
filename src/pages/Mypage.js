@@ -18,6 +18,12 @@ const Mypage = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
   
+      // 토큰이 없으면 로그인 페이지로 리디렉션
+      if (!token) {
+        window.location.href = "/login";
+        return; // 리디렉션 후 아래 코드가 실행되지 않도록 return
+      }
+
     const fetchUserInfo = async () => {
       try {
         const response = await axios.get("http://localhost:3000/user/profile", { // 마이페이지 이름 표시
@@ -25,14 +31,16 @@ const Mypage = () => {
           withCredentials: true,
         });
         console.log("Fetched user info:", response.data);
+
+        // 불러온 데이터를 컴포넌트 상태로 설정
         setUserInfo({
           username: response.data.username,
           userId: response.data._id,
           profileImage: response.data.profileImage,
           backgroundImage: response.data.backgroundImage
         });
-        setProfileImage(response.data.profileImage);
-        setBackgroundImage(response.data.backgroundImage);
+        setProfileImage(response.data.profileImage);  // 여기서 프로필 이미지 URL 설정
+        setBackgroundImage(response.data.backgroundImage);  // 여기서 배경 이미지 URL 설정
       } catch (error) {
         console.error("사용자 정보 불러오기 오류:", error);
       }
@@ -71,23 +79,24 @@ useEffect(() => {
 const token = localStorage.getItem("token");
 
 const handleImageUpload = async (file, type) => {
-  const formData = new FormData();
-  formData.append(type, file);  // "profile" 또는 "background"로 설정
-  // formData.append('image', file);
-  // formData.append('type', type);
+const formData = new FormData();
+  formData.append(type, file);
+
+  // formData.append("image", file);
+  // formData.append("type", type); 
 
   try {
     const endpoint = type === "profile" ? "upload-profile" : "upload-background";
     const response = await axios.post(`http://localhost:3000/profile/${endpoint}`, formData, {
-      // 프로필 배경 사진 들어가는 url 
       headers: { 
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`, // 토큰 추가
+        Authorization: `Bearer ${token}`,
       },
       withCredentials: true,
     });
-    console.log("이미지 업로드 응답:", response.data); // 응답 확인
-    return response.data.imageUrl;
+    console.log("이미지 업로드 응답:", response.data);
+    console.log("서버에서 받은 이미지 URL:", response.data.imageUrl); // 서버에서 반환된 URL 확인
+    return response.data.imageUrl; // 서버의 URL 반환
   } catch (error) {
     console.error("이미지 업로드 오류:", error);
     return null;
@@ -134,6 +143,7 @@ const handleImageUpload = async (file, type) => {
       }
   
       // 모든 이미지가 업데이트된 후에 저장 요청을 보냅니다.
+      // DB에 업데이트 요청
       await axios.put("http://localhost:3000/profile/update-profile", {
         profileImage: profileImage,
         backgroundImage: backgroundImage,
@@ -192,10 +202,10 @@ const handleImageUpload = async (file, type) => {
       {isEditing && (
         <div className="edit-section">
           <h3>프로필 사진 변경</h3>
-          <input type="file" accept="image/*" onChange={handleProfileImageChange} />
+          <input type="file" accept="image/*" name="profile" onChange={handleProfileImageChange} />
 
           <h3>배경 사진 변경</h3>
-          <input type="file" accept="image/*" onChange={handleBackgroundImageChange} />
+          <input type="file" accept="image/*" name="background" onChange={handleBackgroundImageChange} />
 
           <button onClick={handleSaveImages} className="save-button">
             저장
