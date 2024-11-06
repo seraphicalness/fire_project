@@ -17,7 +17,9 @@ const userSchema = new Schema({
 	password: {
 		type: String,
 		required: true,
-	}
+	},
+	profileImage: String, // 여기에 profileImage 필드 추가
+  	backgroundImage: String, // 여기에 backgroundImage 필드 추가
 });
 
 // // `findByToken` 메서드를 `userSchema.statics`에 추가

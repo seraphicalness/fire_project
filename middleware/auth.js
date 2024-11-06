@@ -6,7 +6,7 @@ const authware = async (req, res, next) => {
   console.log("Authorization Header:", req.headers.authorization); // 추가
   console.log("Cookies:", req.cookies); // 추가
 
-  
+  // const token = authHeader.split(" ")[1]; // Bearer 접두사 제거
   const token = req.headers.authorization?.split(' ')[1];  // Bearer 방식의 헤더에서 토큰 추출
 
   if (!token) {

@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import connect from './connect/connect.js';  // ES Module 방식의 import
 import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
-import imageRouter from "./routes/imageRouter.js";
+import profileRouter from "./routes/profileRouter.js";
 
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -74,12 +74,13 @@ const upload = multer({ storage });
 // 정적 파일 제공: 업로드된 이미지에 접근할 수 있도록 설정
 app.use('/uploads', express.static('uploads'));
 
-
-
 // 유저 관련 라우트
 app.use("/user", userRouter);
 // 이미지 업로드 라우터
-app.use("/user/images", imageRouter); 
+// app.use("/user/images", imageRouter); 
+// 프로필 수정 라우터 
+app.use("/profile", profileRouter);
+
 
 // 기본 라우트
 app.get("/", (req, res) => {

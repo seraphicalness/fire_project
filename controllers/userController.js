@@ -137,24 +137,6 @@ export const logout = (req, res) => {
   });
 };
 
-// 프로필 이미지 업로드
-export const uploadProfileImage = async (req, res) => {
-  try {
-    const imageUrl = `http://localhost:3000/${req.file.path}`;
-    const userId = req.user._id;  // 인증된 사용자 ID 사용
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { profileImage: imageUrl },
-      { new: true } // 업데이트 후 새로운 객체 반환
-    );
-
-    res.json({ imageUrl: updatedUser.profileImage });
-  } catch (error) {
-    console.error("프로필 이미지 업로드 오류:", error);
-    res.status(500).json({ message: "프로필 이미지 업로드 오류" });
-  }
-};
-
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('username profileImage backgroundImage');
