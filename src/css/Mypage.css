@@ -1,7 +1,9 @@
+/* 전체 박스 스타일 */
 .mybox {
   padding: 20px;
 }
 
+/* 배경 이미지 스타일 */
 .myrect {
   width: 100%;
   height: 200px; /* 배경화면 높이 */
@@ -9,12 +11,14 @@
   margin-bottom: 20px;
 }
 
+/* 프로필 컨테이너 스타일 */
 .profile-container {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
+/* 프로필 이미지 */
 .profile-image {
   width: 100px;
   height: 100px;
@@ -22,11 +26,13 @@
   margin-right: 20px;
 }
 
+/* 프로필 정보 스타일 */
 .profile-info {
   display: flex;
   flex-direction: column;
 }
 
+/* 프로필 수정 버튼 스타일 */
 .edit-profile-button {
   margin-top: 10px;
   padding: 10px;
@@ -37,10 +43,12 @@
   cursor: pointer;
 }
 
+/* 업로드 섹션 */
 .upload-section {
   margin-top: 20px;
 }
 
+/* 업로드된 이미지 스타일 */
 .uploaded-images {
   display: flex;
   flex-wrap: wrap;
@@ -48,11 +56,14 @@
 }
 
 .uploaded-image {
-  width: 100px; /* 업로드된 이미지 크기 */
+  width: 100px;
   height: 100px;
   object-fit: cover; /* 이미지 비율 유지 */
+  border-radius: 8px;
+  overflow: hidden;
 }
 
+/* 사용자 게시글 스타일 */
 .user-posts {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 각 사진의 최소 너비 설정 */
@@ -60,27 +71,55 @@
   margin-top: 20px;
 }
 
+/* 게시글 아이템 스타일 */
 .post-item {
-  border: 1px solid #ddd;
   width: 100%;
-  padding-top: 100%; /* 정사각형 유지 */
-  border-radius: 8px;
+  padding-top: 100%; /* 정사각형 비율 유지 */
   position: relative;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
 }
 
+/* 게시글 이미지 스타일 */
 .post-image {
-  width: 100%; /* 이미지의 너비 */
-  height: 150px; /* 이미지의 높이 */
-  object-fit: cover; /* 이미지 비율 유지 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
+/* 게시글 내용 */
 .post-item p {
-  padding: 8px;
   font-size: 0.9em;
-  margin-top: 160px; /* 이미지 아래에 내용이 배치되도록 여백 추가 */
+  padding: 8px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8); /* 배경을 반투명으로 */
+  text-align: center;
+  margin: 0;
+}
+
+/* Feed의 정사각형 사진 그리드 */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 200px의 최소 크기로 자동 조절 */
+  gap: 10px; /* 이미지 간의 간격 */
+  padding: 20px;
+}
+
+.photo-placeholder {
+  width: 100%;
+  aspect-ratio: 1; /* 정사각형 비율 유지 */
+  overflow: hidden;
+  position: relative;
+}
+
+.photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 부모 요소에 맞춰 잘림 */
 }
