@@ -9,6 +9,8 @@
   height: 200px; /* 배경화면 높이 */
   background-color: lightblue; /* 배경색 */
   margin-bottom: 20px;
+  background-size: cover;
+  background-position: center;
 }
 
 /* 프로필 컨테이너 스타일 */

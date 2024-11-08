@@ -39,16 +39,17 @@ const Mypage = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:3000/user/profile", { // 프로필 이름 불러오기 
+      const response = await axios.get("http://localhost:3000/user/profile", { // 프로필 이름 불러오기, 이렇게 해야 게시글도 불러와짐 
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
-      console.log("Fetched user info:", response.data);
+      console.log("응답 데이터 로그:", response.data);
 
       const { username, _id, profileImage, backgroundImage } = response.data;
+      // 서버에서 받은 이미지 URL을 그대로 사용
       setUserInfo({ username, userId: _id }); // id값으로 접근가능 
-      setProfileImage(profileImage);
-      setBackgroundImage(backgroundImage);
+      setProfileImage(profileImage);  // blob 대신 서버에서 받은 URL 설정
+      setBackgroundImage(backgroundImage); 
 
       fetchUserPosts(_id);
     } catch (error) {
@@ -60,6 +61,7 @@ const Mypage = () => {
     fetchUserInfo();
   }, [fetchUserInfo]);
 
+  // 프로필 업로드 
   const handleImageUpload = async (file, type) => {
     const formData = new FormData();
     formData.append(type, file);
@@ -81,25 +83,40 @@ const Mypage = () => {
     }
   };
 
+// 사진 저장버튼 눌렀을 때 호출 
   const handleSaveImages = async () => {
     try {
-      if (tempProfileImage) {
-        const newProfileImageUrl = await handleImageUpload(tempProfileImage, "profile");
+      let newProfileImageUrl = profileImage;
+      let newBackgroundImageUrl = backgroundImage;
+
+      if (tempProfileImage) { // 서버에 이미지 업로드 
+        newProfileImageUrl = await handleImageUpload(tempProfileImage, "profile"); // 위 함수로 감 
         if (newProfileImageUrl) {
-          setProfileImage(newProfileImageUrl);
+          console.log("새 프로필 이미지 URL:", newProfileImageUrl); // 서버 URL 확인
+          setProfileImage(newProfileImageUrl);  // 서버의 실제 URL로 설정
           setUserInfo(prev => ({ ...prev, profileImage: newProfileImageUrl }));
         } 
       }
 
-      if (tempBackgroundImage) {
-        const newBackgroundImageUrl = await handleImageUpload(tempBackgroundImage, "background");
+      if (tempBackgroundImage) { // 서버에 이미지 업로드 
+        newBackgroundImageUrl = await handleImageUpload(tempBackgroundImage, "background"); // 위 함수로 감 
         if (newBackgroundImageUrl) {
-          setBackgroundImage(newBackgroundImageUrl);
+          console.log("새 배경 이미지 URL:", newBackgroundImageUrl); // 서버 URL 확인
+          setBackgroundImage(newBackgroundImageUrl); // 서버의 실제 URL로 설정
           setUserInfo(prev => ({ ...prev, backgroundImage: newBackgroundImageUrl }));
         } 
       }
 
-      await fetchUserInfo();
+      // 서버로 프로필 이미지를 업데이트하는 용도
+      await axios.put("http://localhost:3000/profile/update-profile", {
+        profileImage: newProfileImageUrl,
+        backgroundImage: newBackgroundImageUrl,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+
+      // await fetchUserInfo();
       setIsEditing(false);
     } catch (error) {
       console.error("저장 중 오류:", error);
@@ -116,10 +133,12 @@ const Mypage = () => {
 
   return (
     <div className="mybox">
-      <div className="myrect" style={{ backgroundImage: `url(${backgroundImage || "default-background-image-url"})` }} />
+      {/* <div className="myrect" style={{ backgroundImage: `url(${backgroundImage || "default-background-image-url"})` }} /> */}
+      <div className="myrect" style={{ backgroundImage: `url(${backgroundImage || "https://via.placeholder.com/200"})` }} />
 
       <div className="profile-container">
-        <img src={profileImage} alt="Profile" className="profile-image" />
+        {/* <img src={profileImage} alt="Profile" className="profile-image" /> */}
+        <img src={profileImage || "https://via.placeholder.com/100"} alt="Profile" className="profile-image" />
 
         <div className="profile-info">
           <h2>{userInfo.username ? "@" + userInfo.username : "로그인 필요"}</h2>
