@@ -1,7 +1,8 @@
 import User from "../schemas/userSchema.js";
 
 // 프로필 이미지 업로드
-export const uploadProfileImage = async (req, res) => {
+export const uploadProfileImage = async (req, res) => { 
+   // profile/upload-profile
   try {
     console.log("프로필 이미지 업로드 요청 수신");
     console.log("업로드된 파일 정보:", req.file); // 파일 정보 확인
@@ -14,19 +15,21 @@ export const uploadProfileImage = async (req, res) => {
 
     // const imageUrl = `http://localhost:3000/${req.file.path.replace('uploads/', '')}`;
     // 실제 서버에서 접근 가능한 URL 생성
-    const imageUrl = `http://localhost:3000/uploads/profile/${req.file.filename}`;
-
+    const imageUrl = `http://localhost:3000/uploads/profile/${req.file.filename}`; // 경로확인완료 
+    // await User.findByIdAndUpdate(req.user._id, { profileImage: imageUrl });
+    
     console.log("생성된 이미지 URL:", imageUrl); // 이미지 URL 확인
-
+    
     const updateResult = await User.findByIdAndUpdate(req.user._id, { profileImage: imageUrl }, { new: true });
     console.log("DB 업데이트 결과:", updateResult); // DB 업데이트 결과 확인
-
+        
     if (!updateResult) {
       console.log("DB 업데이트 실패");
       return res.status(500).json({ message: "DB 업데이트 실패" });
     }
-
-    res.json({ imageUrl }); // 응답으로 이미지 URL 반환
+    
+    // 정상적으로 이미지 URL을 반환
+    res.json({ imageUrl });
   } catch (error) {
     console.error("프로필 이미지 업로드 오류:", error);
     res.status(500).json({ message: "프로필 이미지 업로드 오류", error: error.message });
@@ -45,7 +48,7 @@ export const uploadBackgroundImage = async (req, res) => {
       return res.status(400).json({ message: '파일이 없습니다.' });
     }
 
-    const imageUrl = `http://localhost:3000/${req.file.path.replace('uploads/', '')}`;
+    const imageUrl = `http://localhost:3000/uploads/background/${req.file.filename}`; // 경로확인완료
     console.log("생성된 이미지 URL:", imageUrl); // 이미지 URL 확인
 
     const updateResult = await User.findByIdAndUpdate(req.user._id, { backgroundImage: imageUrl }, { new: true });
@@ -55,7 +58,7 @@ export const uploadBackgroundImage = async (req, res) => {
       console.log("DB 업데이트 실패");
       return res.status(500).json({ message: "DB 업데이트 실패" });
     }
-
+    // 정상적으로 이미지 URL을 반환
     res.json({ imageUrl });
   } catch (error) {
     console.error("배경 이미지 업로드 오류:", error);
@@ -65,6 +68,7 @@ export const uploadBackgroundImage = async (req, res) => {
 
 // 프로필 정보 조회
 export const getProfileInfo = async (req, res) => {
+  // profile/info
   try {
     console.log("프로필 정보 조회 요청 수신");
     const user = await User.findById(req.user._id).select("username profileImage backgroundImage");
@@ -86,7 +90,7 @@ export const getProfileInfo = async (req, res) => {
   }
 };
 
-// 프로필 업데이트 (예: 프로필 이미지, 배경 이미지)
+// 프로필 업데이트 (예: 프로필 이미지, 배경 이미지) - 수정 용도 
 export const updateProfile = async (req, res) => {
   const { profileImage, backgroundImage } = req.body;
   console.log("프로필 업데이트 요청 수신");

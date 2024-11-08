@@ -137,9 +137,11 @@ export const logout = (req, res) => {
   });
 };
 
+// 프로필 정보 조회 용도 (처음으로 조회할때 사용)
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('username profileImage backgroundImage');
+    console.log("조회된 사용자 데이터:", user); // 사용자 데이터를 로그로 출력
     if (!user) {
       return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
     }
