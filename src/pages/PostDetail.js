@@ -17,13 +17,13 @@ function PostDetail() {
       try {
         const response = await axios.get(`http://localhost:3000/posts/${postId}`);
         setPost(response.data);
-        setLikes(response.data.likes || 0);
+        setLikes(response.data.likes); // 좋아요 개수만 설정  || 0
         setComments(response.data.comments || []); // 댓글 목록을 서버에서 불러오기
       } catch (error) {
         console.error('게시글 상세 정보 가져오기 오류:', error);
       }
     };
-
+    // 댓글   
     const fetchComments = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/comments/${postId}`);
@@ -37,9 +37,20 @@ function PostDetail() {
     fetchComments(); // 댓글 목록 가져오기
   }, [postId]); // postId가 변경될 때마다 게시글 정보 가져오기
 
-  const handleLike = () => {
-    setLikes(isLiked ? likes - 1 : likes + 1);
-    setIsLiked(!isLiked);
+  // 좋아요 
+  const handleLikeToggle = async () => {
+    try {
+      const url = `http://localhost:3000/posts/${postId}/${isLiked ? 'unlike' : 'like'}`;
+      const response = await axios.post(url, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      console.log("서버에서 받은 좋아요 개수:", response.data.likes); // 서버에서 받은 좋아요 개수 확인
+      setLikes(response.data.likes); // 최신 좋아요 개수로 업데이트
+      setIsLiked(!isLiked); // 좋아요 상태 변경
+    } catch (error) {
+      console.error('좋아요 상태 변경 오류:', error);
+    }
   };
 
   const handleCommentChange = (e) => setNewComment(e.target.value);
@@ -75,7 +86,7 @@ function PostDetail() {
         
         {/* 좋아요 섹션 */}
         <div className="like-section">
-          <button onClick={handleLike} className="like-button">
+          <button onClick={handleLikeToggle} className="like-button">
             <img src={fireIcon} alt="Like" className="like-icon" />
           </button>
           <span>{likes} Likes</span>
