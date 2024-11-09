@@ -6,6 +6,7 @@ const postSchema = new mongoose.Schema({
   content: { type: String, required: true },
   images: [String], // 이미지 URL 배열
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // 좋아요를 누른 사용자 목록
   createdAt: { type: Date, default: Date.now },
 });
 

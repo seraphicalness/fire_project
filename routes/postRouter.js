@@ -61,7 +61,11 @@ router.get('/:postId', async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
     }
-    res.status(200).json(post);
+    // res.status(200).json(post);
+    res.status(200).json({
+      ...post.toObject(),
+      likes: post.likes.length, // 좋아요 개수만 반환
+    });
   } catch (error) {
     console.error('게시글 가져오기 오류:', error);
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
@@ -90,24 +94,39 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
-// // username으로 사용자 조회 후 해당 사용자의 ObjectId로 게시글 조회
-// router.get('/user/:username', async (req, res) => {
-//   const { username } = req.params;
+// 좋아요 기능
+router.post('/:postId/like', authware, async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findById(postId);
 
-//   try {
-//     const user = await User.findOne({ username });
-//     if (!user) {
-//       return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
-//     }
+    if (!post.likes.includes(req.user._id)) {
+      post.likes.push(req.user._id); // 좋아요 추가
+      await post.save();
+    }
+    console.log("현재 좋아요 개수:", post.likes.length); // 개수를 확인
+    res.status(200).json({ likes: post.likes.length }); // 좋아요 개수만 전송
+  } catch (error) {
+    res.status(500).json({ message: '좋아요 오류', error });
+  }
+});
 
-//     // 찾은 ObjectId로 게시글 검색
-//     const posts = await Post.find({ author: user._id }).populate('author', 'username');
-//     res.status(200).json(posts);
-//   } catch (error) {
-//     console.error("게시글 가져오기 오류:", error);
-//     res.status(500).json({ message: "서버 오류가 발생했습니다." });
-//   }
-// });
+// 좋아요 취소 기능
+router.post('/:postId/unlike', authware, async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findById(postId);
+
+    post.likes = post.likes.filter((userId) => userId.toString() !== req.user._id.toString()); // 좋아요 취소
+    await post.save();
+
+    console.log("현재 좋아요 개수:", post.likes.length); // 개수를 확인
+    res.status(200).json({ likes: post.likes.length }); // 좋아요 개수만 전송
+  } catch (error) {
+    res.status(500).json({ message: '좋아요 취소 오류', error });
+  }
+});
+
 
 export default router;
 
