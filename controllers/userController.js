@@ -1,7 +1,9 @@
 import User from "../schemas/userSchema.js";
 // import { authware } from "../middleware/auth.js"; // 미들웨어로 사용하는 auth import
-// const bcrypt = require("bcrypt");
 import jwt from "jsonwebtoken";
+import bcrypt from 'bcryptjs'; // bcrypt 임포트
+
+
 
 // 회원가입
 
@@ -23,48 +25,94 @@ export const signup = async (req, res) => {
 
 // 로그인
 
+// export const login = async (req, res) => {
+//   try {
+//     // 1. 요청된 아이디가 데이터베이스에 있는지 확인
+//     const user = await User.findOne({ username: req.body.username });
+    
+//     if (!user) {
+//       return res.status(400).json({
+//         loginSuccess: false,
+//         message: "해당 아이디를 가진 유저가 없습니다.",
+//       });
+//     }
+
+//     // 2. 비밀번호가 맞는지 확인
+//     const isMatch = await user.comparePassword(req.body.password);
+    
+//     if (!isMatch) {
+//       return res.status(400).json({
+//         loginSuccess: false,
+//         message: "비밀번호가 틀렸습니다.",
+//       });
+//     }
+
+//     // 3. JWT 토큰 생성
+//     const token = jwt.sign({ userId: user._id }, 'yourSecretKey', { expiresIn: '1h' });  // 토큰 생성
+
+//     // 4. 토큰을 쿠키에 저장한 후 성공 메시지 반환
+//     res.cookie("x_auth", token, { httpOnly: true })
+//       .status(200)
+//       .json({ 
+//         loginSuccess: true, 
+//         userId: user._id,
+//         username: user.username,
+//         token  // 응답에 토큰 포함
+//       });
+    
+//   } catch (err) {
+//     // 에러 처리: 서버 내부 오류 발생 시 500 에러 반환
+//     return res.status(500).json({
+//       loginSuccess: false, 
+//       message: "로그인 중 서버 오류가 발생했습니다.", 
+//       error: err.message 
+//     });
+//   }
+// };
+
 export const login = async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    // 1. 요청된 아이디가 데이터베이스에 있는지 확인
-    const user = await User.findOne({ username: req.body.username });
-    
+    // 사용자 조회
+    const user = await User.findOne({ username });
     if (!user) {
-      return res.status(400).json({
-        loginSuccess: false,
-        message: "해당 아이디를 가진 유저가 없습니다.",
-      });
+      return res.json({ loginSuccess: false, message: '존재하지 않는 아이디입니다.' });
     }
 
-    // 2. 비밀번호가 맞는지 확인
-    const isMatch = await user.comparePassword(req.body.password);
-    
+    // 비밀번호 비교
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({
-        loginSuccess: false,
-        message: "비밀번호가 틀렸습니다.",
-      });
+      return res.json({ loginSuccess: false, message: '비밀번호가 일치하지 않습니다.' });
     }
 
-    // 3. JWT 토큰 생성
-    const token = jwt.sign({ userId: user._id }, 'yourSecretKey', { expiresIn: '1h' });  // 토큰 생성
+    // 토큰 생성
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // 4. 토큰을 쿠키에 저장한 후 성공 메시지 반환
-    res.cookie("x_auth", token, { httpOnly: true })
-      .status(200)
-      .json({ 
-        loginSuccess: true, 
-        userId: user._id,
-        username: user.username,
-        token  // 응답에 토큰 포함
-      });
-    
-  } catch (err) {
-    // 에러 처리: 서버 내부 오류 발생 시 500 에러 반환
-    return res.status(500).json({
-      loginSuccess: false, 
-      message: "로그인 중 서버 오류가 발생했습니다.", 
-      error: err.message 
+    // 쿠키에 토큰 설정 (필요 시)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,  // HTTPS가 아닌 환경에서는 false로 설정
+      sameSite: 'Lax',  // 또는 'Strict', 'None' (CORS 설정에 따라)
     });
+
+    // 세션에 사용자 정보 저장
+    req.session.user = {
+      userId: user._id,
+      username: user.username,
+    };
+
+    // 로그인 성공 응답
+    res.json({
+      loginSuccess: true,
+      message: '로그인에 성공했습니다.',
+      token,  // 필요에 따라 토큰을 응답에 포함
+      username: user.username,
+      userId: user._id,
+    });
+  } catch (error) {
+    console.error('로그인 오류:', error);
+    res.status(500).json({ loginSuccess: false, message: '서버 오류가 발생했습니다.' });
   }
 };
 
@@ -89,157 +137,17 @@ export const logout = (req, res) => {
   });
 };
 
-
-
-// // // 1 회원가입 시 모든 정보 받기
-// // // 이미 유저 존재하는지도 확인 
-// // const Signup = async (req, res)=>{
-// // 	const { username, email, password } = req.body;
-
-// // try {
-// //     // 사용자가 이미 존재하는지 확인
-// //     let user = await userSchema.findOne({ username });
-// //     if (user) {
-// //     return res.status(400).json({ msg: 'User already exists' });
-// //     }
-
-// //     // 새로운 유저 생성
-// //     user = new userSchema({
-// //     username,
-// //     email,
-// //     password,
-// //     });
-
-// //     // 비밀번호 해싱 (UserSchema의 pre('save')로 처리)
-// //     // save로 진행한 해싱과정 동작하는지 확인
-// //     await user.save();
-
-// //     // 토큰 생성
-// //     const payload = {
-// //     user: {
-// //         id: user.id,
-// //     },
-// //     };
-
-// //     // 토큰으로 저장 
-// //     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-// //     // 토큰 반환
-// //     res.json({ token });
-// // } catch (err) {
-// //     console.error(err.message);
-// //     res.status(500).send('Server error');
-// // }
-// // };
-
-
-// // // 2 로그인
-// // const Login = async (req, res)=>{
-// //     const { username, password } = req.body;
-// //     dotenv.config();
-// // }
-
-// // // 사용자 존재하는지 확인
-// // const user = await userSchema.findOne({ username });
-// // if (!user) {
-// // return res.status(400).json({ msg: 'Invalid credentials' });
-// // }
-
-// // // 비밀번호 매칭 
-// // const isMatch = await user.matchPassword(password);
-// // if (!isMatch) {
-// // return res.status(400).json({ msg: 'Invalid credentials' });
-// // }
-
-// // // 회원확인 되었으니 로그인 상태를 유지하기 위한 JWT토큰을 발행
-// // const payload = {
-// //     user: {
-// //     id: user.id,
-// //     },
-// // };
-
-// // const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-// // res.json({ token });
-
-
-// // export { Signup, Login };
-
-// import dotenv from 'dotenv';
-// import jwt from 'jsonwebtoken';
-// import userSchema from '../schemas/userSchema.js';
-
-// // 1 회원가입 시 모든 정보 받기
-// // 이미 유저 존재하는지도 확인 
-// const Signup = async (req, res) => {
-//     console.log("회원가입 요청 데이터:", req.body);
-//     const { username, email, password } = req.body;
-
-//     try {
-//         // 사용자가 이미 존재하는지 확인
-//         let user = await userSchema.findOne({ username });
-//         if (user) {
-//             return res.status(400).json({ msg: 'User already exists' });
-//         }
-
-//         // 새로운 유저 생성
-//         user = new userSchema({
-//             username,
-//             email,
-//             password,
-//         });
-
-//         // 비밀번호 해싱 (UserSchema의 pre('save')로 처리)
-//         await user.save();
-
-//         // 토큰 생성
-//         const payload = {
-//             user: {
-//                 id: user.id,
-//             },
-//         };
-
-//         // 토큰으로 저장 
-//         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-//         // 토큰 반환
-//         res.json({ token });
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server error');
-//     }
-// };
-
-// // 2 로그인
-// const Login = async (req, res) => {
-//     const { username, password } = req.body;
-//     dotenv.config();
-
-//     try {
-//         // 사용자 존재하는지 확인
-//         const user = await userSchema.findOne({ username });
-//         if (!user) {
-//             return res.status(400).json({ msg: 'Invalid credentials' });
-//         }
-
-//         // 비밀번호 매칭 
-//         const isMatch = await user.matchPassword(password);
-//         if (!isMatch) {
-//             return res.status(400).json({ msg: 'Invalid credentials' });
-//         }
-
-//         // 회원확인 되었으니 로그인 상태를 유지하기 위한 JWT토큰을 발행
-//         const payload = {
-//             user: {
-//                 id: user.id,
-//             },
-//         };
-
-//         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-//         res.json({ token });
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server error');
-//     }
-// };
-
-// export { Signup, Login };
+// 프로필 정보 조회 용도 (처음으로 조회할때 사용)
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('username profileImage backgroundImage');
+    console.log("조회된 사용자 데이터:", user); // 사용자 데이터를 로그로 출력
+    if (!user) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('사용자 정보 불러오기 오류:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+};
