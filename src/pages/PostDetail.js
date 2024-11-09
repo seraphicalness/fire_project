@@ -18,13 +18,24 @@ function PostDetail() {
         const response = await axios.get(`http://localhost:3000/posts/${postId}`);
         setPost(response.data);
         setLikes(response.data.likes || 0);
-        setComments(response.data.comments || []);
+        setComments(response.data.comments || []); // 댓글 목록을 서버에서 불러오기
       } catch (error) {
         console.error('게시글 상세 정보 가져오기 오류:', error);
       }
     };
-    fetchPostDetail();
-  }, [postId]);
+
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/comments/${postId}`);
+        setComments(response.data); // 댓글을 comments 상태에 저장
+      } catch (error) {
+        console.error('댓글 가져오기 오류:', error);
+      }
+    };
+
+    fetchPostDetail(); // 게시글 상세정보 가져오기 
+    fetchComments(); // 댓글 목록 가져오기
+  }, [postId]); // postId가 변경될 때마다 게시글 정보 가져오기
 
   const handleLike = () => {
     setLikes(isLiked ? likes - 1 : likes + 1);
@@ -36,14 +47,21 @@ function PostDetail() {
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return;
 
-    try {
-      const response = await axios.post(`http://localhost:3000/posts/${postId}/comments`, { content: newComment });
-      setComments([...comments, response.data]);
-      setNewComment('');
-    } catch (error) {
-      console.error('댓글 추가 오류:', error);
-    }
-  };
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.post(
+          `http://localhost:3000/comments/${postId}`,
+          { content: newComment },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setComments([...comments, response.data]); // 댓글 상태 업데이트
+        setNewComment(''); // 입력 필드 초기화
+      } catch (error) {
+        console.error('댓글 추가 오류:', error);
+      }
+    };
 
   if (!post) return <p>게시글을 불러오는 중입니다...</p>;
 
@@ -68,7 +86,7 @@ function PostDetail() {
           <div className="comment-list">
             {comments.map((comment, index) => (
               <div key={index} className="comment">
-                <p><strong>{comment.author?.username || '익명'}</strong>: {comment.content}</p>
+                <p><strong>{comment.author?.username || '작성자 로딩중..'}</strong>: {comment.content}</p>
               </div>
             ))}
           </div>
