@@ -7,6 +7,8 @@ import connect from './connect/connect.js';  // ES Module 방식의 import
 import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
 import profileRouter from "./routes/profileRouter.js";
+import commentRouter from './routes/commentRouter.js';
+
 
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -80,8 +82,8 @@ app.use("/user", userRouter);
 // app.use("/user/images", imageRouter); 
 // 프로필 수정 라우터 
 app.use("/profile", profileRouter);
-
-
+// 댓글 라우터 
+app.use('/comments', commentRouter);
 // 기본 라우트
 app.get("/", (req, res) => {
   res.send("Hello World!");
