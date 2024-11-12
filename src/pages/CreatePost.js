@@ -21,6 +21,12 @@ const CreatePost = ({ onClose }) => {
   // 폼 제출 핸들러
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    // 이미지와 내용이 모두 있어야만 제출 가능
+    if (content.trim() === '' || images.length === 0) {
+      setError('글과 사진을 모두 첨부해야 합니다.'); // 에러 메시지 설정
+      return;
+    }
 
     // 폼 데이터 생성
     const formData = new FormData();
@@ -62,7 +68,7 @@ const CreatePost = ({ onClose }) => {
   return (
     <div className="create-post-modal">
       <form onSubmit={handleSubmit}>
-        <h2>새 글 작성</h2>
+        <h2>글쓰기</h2>
         <textarea
           placeholder="내용을 입력하세요"
           value={content}

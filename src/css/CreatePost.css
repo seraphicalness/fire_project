@@ -1,0 +1,106 @@
+/* 모달 배경 */
+.create-post-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* 모달 내용 */
+  .create-post-modal form {
+    background: #fff;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* 제목 */
+  .create-post-modal h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* 텍스트 입력 (textarea) */
+  .create-post-modal textarea {
+    width: 95%;
+    height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: none;
+    outline: none;
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 파일 선택 input */
+  .create-post-modal input[type="file"] {
+    font-size: 14px;
+    padding: 5px;
+  }
+  
+  /* 버튼 그룹 */
+  .button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  /* 게시 버튼 */
+  .button-group button[type="submit"] {
+    background-color: #000;
+    font-weight: 600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-group button[type="submit"]:hover {
+    background-color: #45A049;
+  }
+  
+  .button-group button[type="submit"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* 취소 버튼 */
+  .button-group button[type="button"] {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: 1px solid #000;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-group button[type="button"]:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* 에러 메시지 */
+  .error-message {
+    color: #f44336;
+    font-size: 14px;
+    margin-top: -10px;
+  }
