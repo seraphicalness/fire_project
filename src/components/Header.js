@@ -14,6 +14,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
           <li><button className="menu-button" onClick={() => navigate('/event')}>이벤트</button></li>
           <li><button className="menu-button" onClick={() => navigate('/notifications')}>알림</button></li>
           <li><button className="menu-button" onClick={() => navigate('/mypage')}>마이페이지</button></li>
+          <li><button className="menu-button" onClick={() => navigate('/chatpage')}>메세지</button></li>
         </ul>
         <div className="auth-buttons">
           {/* 로그인 상태에 따라 로그인/로그아웃 버튼을 표시 */}

@@ -43,6 +43,10 @@ const Event = () => {
           &gt;
         </button>
       </div>
+      <div className="box-container">
+        <div className="box"></div>
+        <div className="box"></div>
+      </div>
     </div>
   );
 };
