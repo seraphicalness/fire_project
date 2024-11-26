@@ -8,7 +8,9 @@ import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
 import profileRouter from "./routes/profileRouter.js";
 import commentRouter from './routes/commentRouter.js';
-
+import notificationRouter from './routes/notificationRouter.js'; 
+import chatRouter from './routes/chatRouter.js';
+import messageRouter from './routes/messageRouter.js';
 
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -27,11 +29,27 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // CORS 설정을 라우터 앞에 적용
-app.use(cors({
-    origin: 'http://localhost:3001',  // 허용할 도메인
-    methods: ['GET', 'POST', 'DELETE', 'PUT'],  // 허용할 HTTP 메소드
-    credentials: true,  // 인증과 함께 요청할 수 있게 설정, 쿠키 전송 허용 
-}));
+// app.use(cors({
+//     origin: 'http://localhost:3001',  // 허용할 도메인
+//     methods: ['GET', 'POST', 'DELETE', 'PUT'],  // 허용할 HTTP 메소드
+//     credentials: true,  // 인증과 함께 요청할 수 있게 설정, 쿠키 전송 허용 
+// }));
+// app.use(cors({ origin: '*', credentials: true })); // 임시로 모든 주소 허용 
+
+const allowedOrigins = ['http://localhost:3001', 'http://localhost:3002'];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS 정책에 의해 차단된 도메인입니다.'));
+      }
+    },
+    credentials: true, // 쿠키 및 인증 정보 허용
+  })
+);
 
 app.use(session({
   secret: process.env.SESSION_SECRET,  // 안전한 secret key
@@ -78,8 +96,6 @@ app.use('/uploads', express.static('uploads'));
 
 // 유저 관련 라우트
 app.use("/user", userRouter);
-// 이미지 업로드 라우터
-// app.use("/user/images", imageRouter); 
 // 프로필 수정 라우터 
 app.use("/profile", profileRouter);
 // 댓글 라우터 
@@ -90,9 +106,17 @@ app.get("/", (req, res) => {
 });
 // 포스트 라우트 
 app.use('/posts', postRouter);
+// 알림 라우트
+app.use('/notifications', notificationRouter);
+// 채팅방 생성 
+app.use('/chat', chatRouter);
+// 메세지 보내기 
+app.use('/message', messageRouter);
 
 // 서버 실행
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port}에서 실행 중입니다.`);
 });
+
+export default app;

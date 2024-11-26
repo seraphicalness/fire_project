@@ -4,6 +4,7 @@ import path from 'path';
 import Post from '../schemas/postSchema.js'; // 포스트 스키마 임포트
 import User from '../schemas/userSchema.js'; // User 스키마 임포트
 import { authware } from '../middleware/auth.js'; // 인증 미들웨어
+import Notification from '../schemas/notificationSchema.js';
 
 const router = express.Router();
 
@@ -103,6 +104,15 @@ router.post('/:postId/like', authware, async (req, res) => {
     if (!post.likes.includes(req.user._id)) {
       post.likes.push(req.user._id); // 좋아요 추가
       await post.save();
+
+      // 알림 생성
+      await Notification.create({
+        type: 'like',
+        postId: post._id,
+        userId: req.user._id,
+        recipientId: post.author // 게시글 작성자에게 알림
+      });
+
     }
     console.log("현재 좋아요 개수:", post.likes.length); // 개수를 확인
     res.status(200).json({ likes: post.likes.length }); // 좋아요 개수만 전송
@@ -120,12 +130,22 @@ router.post('/:postId/unlike', authware, async (req, res) => {
     post.likes = post.likes.filter((userId) => userId.toString() !== req.user._id.toString()); // 좋아요 취소
     await post.save();
 
+    // 알림 생성
+    await Notification.create({
+      type: 'comment',
+      postId: post._id,
+      userId: req.user._id,
+      recipientId: post.author
+    });
+
     console.log("현재 좋아요 개수:", post.likes.length); // 개수를 확인
     res.status(200).json({ likes: post.likes.length }); // 좋아요 개수만 전송
   } catch (error) {
     res.status(500).json({ message: '좋아요 취소 오류', error });
   }
 });
+
+
 
 
 export default router;
