@@ -10,6 +10,7 @@ import Notifications from './pages/Noticifications.js';
 import PostDetail from './pages/PostDetail.js';
 import axios from 'axios';
 import './App.css';
+import ChatPage from './pages/chat/ChatPage.js';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -69,7 +70,7 @@ function App() {
           {/* /mypage와 /mypage/:username 둘 다 접근 가능하게 설정 */}
           <Route path="/mypage" element={<Mypage />} /> {/* 기본 마이페이지 경로 */}
           <Route path="/mypage/:username" element={<Mypage />} /> {/* username이 포함된 마이페이지 경로 */}
-
+          <Route path='/chatpage' element={<ChatPage/>} />
         </Routes>
     </div>
   </Router>

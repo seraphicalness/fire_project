@@ -40,14 +40,32 @@
   right: 20px;
 }
 
-.box-container {
+/* .box-container {
   display: flex;
   flex-wrap: wrap;
   gap: 29px;
-}
+} */
 
 .small-box {
   width: 700px;
   height: 300px;
   background-color: lightcoral;
+}
+
+.box-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 사각형 간의 간격 */
+  align-items: center; /* 가운데 정렬 */
+  margin-top: 20px;
+}
+
+.box {
+  display: flex;
+  width: 90%; /* 사각형의 너비 */
+  height: 200px; /* 사각형의 높이 */
+  background-color: #ddd; /* 사각형의 배경색 */
+  border: 1px solid #ccc;
+  /* align-items: center; 가운데 정렬 */
+  border-radius: 8px; /* 모서리 둥글기 */
 }
