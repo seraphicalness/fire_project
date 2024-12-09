@@ -23,7 +23,6 @@ const ChatRoom = ({ chatId }) => {
         console.error("메시지 가져오기 오류:", error);
       }
     };
-
     if (chatId) fetchMessages();
   }, [chatId]);
 

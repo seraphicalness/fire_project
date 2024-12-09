@@ -10,6 +10,13 @@ const Event = () => {
     `${process.env.PUBLIC_URL}/images/image4.png`,
   ]; // 이미지 배열을 미리 정의합니다.
 
+  const eventTexts = [
+    "🎉 # 해시태그로 여러분의 열받는 순간을 공유하세요",
+    "📢 신규 가입 시, 포인트 증정",
+    "🎁 일주일동안 가장 많이 불꽃을 받은 사람 이벤트",
+    "🌟 추가 예정",
+  ]; // 이벤트 문구 배열
+
   // 슬라이드가 2초마다 자동으로 넘어가도록 설정
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,8 +51,12 @@ const Event = () => {
         </button>
       </div>
       <div className="box-container">
-        <div className="box"></div>
-        <div className="box"></div>
+        {/* 이벤트 문구를 각 박스에 삽입 */}
+        {eventTexts.map((text, index) => (
+          <div key={index} className="box">
+            <p className="event-text">{text}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
