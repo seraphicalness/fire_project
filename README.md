@@ -1,5 +1,4 @@
-
-<h1> 열받침 프로젝트 </h1>
+<h1> 일상 속 여러 순간을 공유하는 플랫폼 열받침 프로젝트 </h1>
 
 
 <img width="160" alt="스크린샷 2025-06-09 오후 2 49 17" src="https://github.com/user-attachments/assets/5f75b8e6-4794-4fd1-bebe-83cfcfe01c27" /><br>
