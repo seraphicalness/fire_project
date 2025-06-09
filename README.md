@@ -1,4 +1,17 @@
 
 <h1> 열받침 프로젝트 </h1>
 
-![Slide 16_9 - 1.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/bc57bfd1-b7c9-4c46-b20b-ba4fb15bf6ba/c3f33f47-63df-499e-8994-c36e4508b8a5/Slide_16_9_-_1.png)
+
+<img width="160" alt="스크린샷 2025-06-09 오후 2 49 17" src="https://github.com/user-attachments/assets/5f75b8e6-4794-4fd1-bebe-83cfcfe01c27" />
+<img width="442" alt="스크린샷 2025-06-09 오후 2 49 44" src="https://github.com/user-attachments/assets/03761203-19f7-4739-95d6-77fbfd002ecc" />
+<img width="451" alt="스크린샷 2025-06-09 오후 2 49 52" src="https://github.com/user-attachments/assets/e8271483-e349-400d-9d19-bcbcd00eaf35" />
+<img width="451" alt="스크린샷 2025-06-09 오후 2 50 01" src="https://github.com/user-attachments/assets/7bfbeadf-6ce0-4945-9477-f7abec2644f9" />
+<img width="460" alt="스크린샷 2025-06-09 오후 2 50 09" src="https://github.com/user-attachments/assets/43298c43-32e6-41ce-8f95-6dcbf6af13ed" />
+<img width="452" alt="스크린샷 2025-06-09 오후 2 50 18" src="https://github.com/user-attachments/assets/bb2f7640-9894-4986-a716-2e44db266215" />
+<img width="452" alt="스크린샷 2025-06-09 오후 2 50 24" src="https://github.com/user-attachments/assets/878210e0-acbf-452f-a8f0-d1dbb19fcb1f" />
+<img width="447" alt="스크린샷 2025-06-09 오후 2 50 30" src="https://github.com/user-attachments/assets/d9b6c5a9-d116-46a7-a124-f37fef31228a" />
+<img width="450" alt="스크린샷 2025-06-09 오후 2 50 38" src="https://github.com/user-attachments/assets/74549d53-dcaf-46f2-9f0f-d888b9c307ab" />
+<img width="445" alt="스크린샷 2025-06-09 오후 2 50 44" src="https://github.com/user-attachments/assets/ac29d08d-f569-4589-aaf9-423cf86b60ed" />
+<img width="444" alt="스크린샷 2025-06-09 오후 2 50 54" src="https://github.com/user-attachments/assets/dccdd4b7-e9b6-448b-83f7-c68ee9829594" />
+<img width="312" alt="스크린샷 2025-06-09 오후 2 51 02" src="https://github.com/user-attachments/assets/ec41e487-1655-4cff-858d-7e7ee93ca812" />
+<img width="259" alt="스크린샷 2025-06-09 오후 2 51 15" src="https://github.com/user-attachments/assets/2bd40123-8217-4980-ad7a-b049b79e40a4" />
